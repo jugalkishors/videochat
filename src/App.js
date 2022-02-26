@@ -105,6 +105,7 @@ const App = () => {
           <p>Called Person</p>
         </div>
       </div>
+<p>designed by edu-developers</p>
     </div>
   )
 }

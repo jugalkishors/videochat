@@ -20,14 +20,22 @@ const App = () => {
 
     //it will run reciever call side... (like whome we called to that person)
     peer.on('call', (call) => {
-      var constraints = { video: { width: 400, height: 400 }, audio: true };
-      navigator.mediaDevices.getUserMedia(constraints)
+      var selfStream = { video: { width: 400, height: 400 }};
+    var remoteAudioStream = { video: { width: 400, height: 400 }, audio: true };
+
+      navigator.mediaDevices.getUserMedia(selfStream)
         .then(function (mediaStream) {
-          // var video = document.querySelector("video");
           console.log(mediaStream);
           currentUserVideoRef.current.srcObject = mediaStream;
           currentUserVideoRef.current.play();
+        })
+        .catch(function (err) {
+          console.log(err.name + ": " + err.message);
+        });
 
+
+        navigator.mediaDevices.getUserMedia(remoteAudioStream)
+        .then(function (mediaStream) {
           call.answer(mediaStream)
           call.on('stream', function (remoteStream) {
             remoteUserVideoRef.current.srcObject = remoteStream;
@@ -44,15 +52,23 @@ const App = () => {
 
 
   const call = (remoteId) => {
-    var constraints = { video: { width: 400, height: 400 }, audio: true };
-    navigator.mediaDevices.getUserMedia(constraints)
+    var selfStream = { video: { width: 400, height: 400 }};
+    var remoteAudioStream = { video: { width: 400, height: 400 }, audio: true };
+
+    navigator.mediaDevices.getUserMedia(selfStream)
       .then(function (mediaStream) {
         var rat = peer.call(remoteId, mediaStream)
-        //  console.log('call on function=>', rat.call.on);
-
         currentUserVideoRef.current.srcObject = mediaStream
         currentUserVideoRef.current.play();
+      })
+      .catch(function (err) {
+        console.log(err.name + ": " + err.message);
+      });
 
+
+      navigator.mediaDevices.getUserMedia(remoteAudioStream)
+      .then(function (mediaStream) {
+        var rat = peer.call(remoteId, mediaStream)
         //recieves video from person whom we called...
         rat.on('stream', (remoteStream) => {
           remoteUserVideoRef.current.srcObject = remoteStream
@@ -105,7 +121,6 @@ const App = () => {
           <p>Called Person</p>
         </div>
       </div>
-<p>designed by edu-developers</p>
     </div>
   )
 }

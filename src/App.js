@@ -3,7 +3,12 @@ import Peer from 'peerjs';
 
 
 const App = () => {
-  const peer = new Peer();
+  const peer = new Peer({
+    host: 'https://eduvideochat.herokuapp.com',
+    port: '3000',
+    path: '/',
+    secure: true
+  });
 
   const [userId, setUserId] = useState('');
   const [currentUserpeerId, setCurrnetPeerId] = useState('');
